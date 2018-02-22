@@ -1,0 +1,20 @@
+true
+true
+true
+true
+98 67 55 45 
+false
+true
+false
+98
+98
+98 67 55 *45 
+4
+Error in line: Size
+true
+true
+Error in insert: IllegalArgumentException raised
+98 67 55 *45 32 84 
+Error in insert: IllegalArgumentException raised
+Error in insert: IllegalArgumentException raised
+Error in line: hih

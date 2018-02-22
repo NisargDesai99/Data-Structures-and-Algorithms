@@ -21,16 +21,35 @@ public class Main {
 
             try {
                 if (str.contains("Insert")) {
+                		// out.println("Length " + str.length() + " " + "Index of ':' : " + str.indexOf(":"));
+                		if (str.indexOf(":") == -1) {
+                			strBuilder.append("Error in Line: " + str + "\n");
+                			continue;
+                		}
                     inInsertMethod = true;
-                    strBuilder.append(myLazyBST.insert(Integer.parseInt(str.substring(str.lastIndexOf(":")+1, str.length()))) + "\n");
+                    boolean isInserted = myLazyBST.insert(Integer.parseInt(str.substring(str.lastIndexOf(":")+1, str.length())));
+                    strBuilder.append((isInserted) ? "True":"False");
+                    strBuilder.append("\n");
                     inInsertMethod = false;
                 } else if (str.contains("Delete")) {
+	                	if (str.indexOf(":") == -1) {
+	            			strBuilder.append("Error in Line: " + str + "\n");
+	            			continue;
+	            		}
                     inDeleteMethod = true;
-                    strBuilder.append(myLazyBST.delete(Integer.parseInt(str.substring(str.lastIndexOf(":")+1, str.length()))) + "\n");
+                    boolean isDeleted = myLazyBST.delete(Integer.parseInt(str.substring(str.lastIndexOf(":")+1, str.length()))); 
+                    strBuilder.append((isDeleted) ? "True":"False");
+                    strBuilder.append("\n");
                     inDeleteMethod = false;
                 } else if (str.contains("Contains")) {
+	                	if (str.indexOf(":") == -1) {
+	            			strBuilder.append("Error in Line: " + str + "\n");
+	            			continue;
+	            		}
                     inContainsMethod = true;
-                    strBuilder.append(myLazyBST.contains(Integer.parseInt(str.substring(str.lastIndexOf(":")+1, str.length()))) + "\n");
+                    boolean isContain = myLazyBST.contains(Integer.parseInt(str.substring(str.lastIndexOf(":")+1, str.length()))); 
+                    strBuilder.append((isContain) ? "True":"False");
+                    strBuilder.append("\n");
                     inContainsMethod = false;
                 } else if (str.contains("Max")) {
                     out.println(myLazyBST.findMax());
@@ -38,6 +57,9 @@ public class Main {
                 } else if (str.contains("Min")) {
                     out.println(myLazyBST.findMin());
                     strBuilder.append(myLazyBST.findMin() + "\n");
+                } else if (str.equals("Size")){
+                		out.println(myLazyBST.size());
+                		strBuilder.append(myLazyBST.size() + "\n");
                 } else if (str.equals("Height")) {
                     out.println(myLazyBST.height());
                     strBuilder.append(myLazyBST.height() + "\n");
@@ -45,8 +67,8 @@ public class Main {
                     out.println(myLazyBST);
                     strBuilder.append(myLazyBST.toString() + "\n");
                 } else {
-                    out.println("Error in line: " + str);
-                    strBuilder.append("Error in line: " + str + "\n");
+                    out.println("Error in Line: " + str);
+                    strBuilder.append("Error in Line: " + str + "\n");
                 }
             } catch (Exception ex) {
                 if (ex instanceof IllegalArgumentException) {
@@ -64,6 +86,6 @@ public class Main {
             }
         }
 
-        fileOut.overwriteToFile(strBuilder.toString());
+        fileOut.overwriteToFile((strBuilder.deleteCharAt(strBuilder.length()-1)).toString());
     }
 }

@@ -135,7 +135,7 @@ public class LazyBinarySearchTree {
     public int height() {
         int height = 0;
         height = findHeight(this.root);
-        return height;
+        return height - 1;
     }
 
     public int size() {

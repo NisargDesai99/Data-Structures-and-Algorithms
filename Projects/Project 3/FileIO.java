@@ -20,10 +20,8 @@ public class FileIO {
             fileReader = new FileReader(file);
             bufferedReader = new BufferedReader(fileReader);
         } catch (Exception ex) {
-
             if (ex instanceof FileNotFoundException) {
-                out.println("The file could not be found. Creating new file now...");
-                createFile(file);
+                out.println("The file could not be found. Please enter a new path or filename.");
             } else {
                 out.println("Error opening file for reading.\n" + ex);
             }
@@ -72,7 +70,7 @@ public class FileIO {
                 }
                 closeFileForReading();
             } else {
-                closeFileForReading();
+                // closeFileForReading();
                 return null;
             }
         } catch (Exception ex) {
@@ -133,10 +131,9 @@ public class FileIO {
 
     public void overwriteToFile(String strToWrite) {
         try {
-            fileWriter = new FileWriter(file,false);
-            bufferedWriter = new BufferedWriter(fileWriter);
+            openFileForWriting(false);
 
-            bufferedWriter.write(strToWrite);
+            this.bufferedWriter.write(strToWrite);
 
             bufferedWriter.close();
         } catch (Exception ex) {

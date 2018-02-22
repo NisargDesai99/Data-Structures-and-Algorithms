@@ -9,24 +9,27 @@ public class Main {
 
         LazyBinarySearchTree myLazyBST = new LazyBinarySearchTree();
         
-        Scanner scanner = new Scanner(System.in);
-        
+        // THEY SHOULD GIVE THE ENTIRE FILE NAME
         String inputFileName = "";
-        out.print("Enter the name of the input file: ");
-        while (!inputFileName.contains(".txt")) {
-        		inputFileName = scanner.nextLine();
-        		if (!inputFileName.contains(".txt")) { out.println("Invalid filename. Try again."); }
+        if (args.length == 0) {
+        		out.println("You must enter a path or a filename. Please re-run the program.");
+        		System.exit(10);
+        } else {
+        		// out.println(args[0]);
+        		inputFileName = args[0];
         }
         
         String outputFileName = "output.txt";
-        out.println("Output sent to file: " + outputFileName);
-        
         FileIO fileIn = new FileIO(new File(inputFileName));
         FileIO fileOut = new FileIO(new File(outputFileName));
-        ArrayList<String> list = fileIn.readAsStringArrayList();
+        ArrayList<String> commandsList = fileIn.readAsStringArrayList();
         StringBuilder strBuilder = new StringBuilder();
 
-        for (String str : list) {
+        if (commandsList == null) {
+        		System.exit(10);
+        }
+        
+        for (String str : commandsList) {
             boolean inInsertMethod = false;
             boolean inDeleteMethod = false;
             boolean inContainsMethod = false;
@@ -99,5 +102,6 @@ public class Main {
         }
 
         fileOut.overwriteToFile((strBuilder.deleteCharAt(strBuilder.length()-1)).toString());
+        out.println("Output sent to file: " + outputFileName);
     }
 }

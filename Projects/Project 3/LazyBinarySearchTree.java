@@ -2,12 +2,14 @@
  * Filename:			LazyBinarySearchTree.java
  * Project:			Project 3
  * 
- * Purporse:		A class to represent a lazy binary search tree. 
+ * Purpose:		A class to represent a lazy binary search tree. 
  * 				Works like library code.
- * 				
+ * 				It is considered lazy because it implements lazy deletion 
+ * 				Meaning the node is merely MARKED deleted and is still physically in the tree.
  */
 
 import java.lang.StringBuilder;
+import java.lang.String;
 import java.lang.System;
 import static java.lang.System.out;
 
@@ -336,78 +338,6 @@ public class LazyBinarySearchTree {
         													// makes it pre-order
         return strBuilder.toString();	// return
     }
-
-    private void recursiveTraversalToString(TreeNode root, boolean isRoot, int child, StringBuilder strBuilder) {
-
-        if (isRoot) {
-            strBuilder.append("Root: " + root.toString());
-            strBuilder.append("\n");
-            out.println("Root: " + root);
-            if (root.leftChild != null) {
-                // recursiveTraversalToString(root.leftChild, false, 1, strBuilder);
-                out.println("first left recursive call");
-                recursiveTraversalToString(root, false, 1, strBuilder);
-            }
-            if (root.rightChild != null) {
-                // recursiveTraversalToString(root.rightChild, false, 2, strBuilder);
-                out.println("first right recursive call");
-                recursiveTraversalToString(root, false, 2, strBuilder);
-            }
-        }
-
-        if (!isRoot) {
-            if (child == 1) { // if its a left child
-                TreeNode parent = root;
-                out.println(root.leftChild == null ? ""
-                        : "Left Child of " + parent.toString() + ": " + root.leftChild.toString());
-                strBuilder.append(root.leftChild == null ? ""
-                        : "Left Child of " + parent.toString() + ": " + root.leftChild.toString());
-                strBuilder.append("\n");
-            }
-            if (child == 2) {
-                TreeNode parent = root;
-                out.println("now in the right");
-                out.println(root.rightChild == null ? ""
-                        : "Right Child of " + parent.toString() + ": " + root.rightChild.toString());
-                strBuilder.append(root.rightChild == null ? ""
-                        : "Right Child of " + parent.toString() + ": " + root.rightChild.toString());
-                strBuilder.append("\n");
-            }
-
-            if (root.leftChild != null) {
-                out.println("continue left recursive call");
-                recursiveTraversalToString(root.leftChild, false, 1, strBuilder);
-            }
-            if (root.rightChild != null) {
-                out.println("continue right recursive call");
-                recursiveTraversalToString(root.rightChild, false, 2, strBuilder);
-            }
-        }
-
-        /*
-        if (root.leftChild == null && root.rightChild == null) {
-            strBuilder.append(root.toString());
-            strBuilder.append("\n");
-            if (side == 0) System.out.println("");
-            else if (side == 1) System.out.println("Left: " + root.toString());
-            else if (side == 2) System.out.println("Right: " + root.toString());
-        }
-        
-        if (root.leftChild != null) {
-            strBuilder.append("Parent: " + root.toString());
-            strBuilder.append("\n");
-            System.out.println("Parent: " + root.toString());
-            recursiveTraversalToString(root.leftChild, 1);
-        }
-        
-        if (root.rightChild != null) {
-            strBuilder.append("Parent: " + root.toString());
-            strBuilder.append("\n");
-            System.out.println("Parent: " + root.toString());
-            recursiveTraversalToString(root.rightChild, 2);
-        }
-        */
-    }
     
     /* This recursive method calculates the height of the node from the root
      * Called by the height() method
@@ -461,6 +391,83 @@ public class LazyBinarySearchTree {
     }
 
 }
+
+
+/*
+private void recursiveTraversalToString(TreeNode root, boolean isRoot, int child, StringBuilder strBuilder) {
+
+        if (isRoot) {
+            strBuilder.append("Root: " + root.toString());
+            strBuilder.append("\n");
+            out.println("Root: " + root);
+            if (root.leftChild != null) {
+                // recursiveTraversalToString(root.leftChild, false, 1, strBuilder);
+                out.println("first left recursive call");
+                recursiveTraversalToString(root, false, 1, strBuilder);
+            }
+            if (root.rightChild != null) {
+                // recursiveTraversalToString(root.rightChild, false, 2, strBuilder);
+                out.println("first right recursive call");
+                recursiveTraversalToString(root, false, 2, strBuilder);
+            }
+        }
+
+        if (!isRoot) {
+            if (child == 1) { // if its a left child
+                TreeNode parent = root;
+                out.println(root.leftChild == null ? ""
+                        : "Left Child of " + parent.toString() + ": " + root.leftChild.toString());
+                strBuilder.append(root.leftChild == null ? ""
+                        : "Left Child of " + parent.toString() + ": " + root.leftChild.toString());
+                strBuilder.append("\n");
+            }
+            if (child == 2) {
+                TreeNode parent = root;
+                out.println("now in the right");
+                out.println(root.rightChild == null ? ""
+                        : "Right Child of " + parent.toString() + ": " + root.rightChild.toString());
+                strBuilder.append(root.rightChild == null ? ""
+                        : "Right Child of " + parent.toString() + ": " + root.rightChild.toString());
+                strBuilder.append("\n");
+            }
+
+            if (root.leftChild != null) {
+                out.println("continue left recursive call");
+                recursiveTraversalToString(root.leftChild, false, 1, strBuilder);
+            }
+            if (root.rightChild != null) {
+                out.println("continue right recursive call");
+                recursiveTraversalToString(root.rightChild, false, 2, strBuilder);
+            }
+        }
+
+        
+        if (root.leftChild == null && root.rightChild == null) {
+            strBuilder.append(root.toString());
+            strBuilder.append("\n");
+            if (side == 0) System.out.println("");
+            else if (side == 1) System.out.println("Left: " + root.toString());
+            else if (side == 2) System.out.println("Right: " + root.toString());
+        }
+        
+        if (root.leftChild != null) {
+            strBuilder.append("Parent: " + root.toString());
+            strBuilder.append("\n");
+            System.out.println("Parent: " + root.toString());
+            recursiveTraversalToString(root.leftChild, 1);
+        }
+        
+        if (root.rightChild != null) {
+            strBuilder.append("Parent: " + root.toString());
+            strBuilder.append("\n");
+            System.out.println("Parent: " + root.toString());
+            recursiveTraversalToString(root.rightChild, 2);
+        }
+        
+    }
+
+ */
+
 
 /*private int findHeight(TreeNode root, int currMax, int prevMax, int realTing, int height) {
 

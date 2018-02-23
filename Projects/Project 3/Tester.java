@@ -5,7 +5,7 @@ public class Tester {
 
         LazyBinarySearchTree balancedTesterBST = new LazyBinarySearchTree();
         LazyBinarySearchTree unbalancedTesterBST = new LazyBinarySearchTree();
-
+        
         // TEST INSERT
         out.println("-----INSERT-----");
         out.println("Edge cases");

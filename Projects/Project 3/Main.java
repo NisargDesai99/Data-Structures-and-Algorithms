@@ -21,17 +21,19 @@ public class Main {
         LazyBinarySearchTree myLazyBST = new LazyBinarySearchTree();
         
         String inputFileName = "";
+        String outputFileName = "";
         
         /*
          * Check if they entered something as an argument or not
          * If not, ask them to enter a new path/filename and to re-run the program
          * Set the inputFileName to args[0] if it exists
          */
-        if (args.length == 0) {
-        		out.println("You must enter a path or a filename. Please re-run the program.");
+        if (args.length < 2) {
+        		out.println("You must enter a path or a filename for BOTH input AND output.\nPlease re-run the program.");
         		System.exit(10);
         } else {
         		inputFileName = args[0];
+        		outputFileName = args[1];
         }
         
         /*
@@ -45,7 +47,7 @@ public class Main {
          * results is a StringBuilder that collects all the output for the input commands
          * 	this can later be converted to toString() and written to the output file
          */
-        String outputFileName = "output.txt";
+        
         FileIO fileIn = new FileIO(new File(inputFileName));
         FileIO fileOut = new FileIO(new File(outputFileName));
         ArrayList<String> commandsList = fileIn.readAsStringArrayList();
@@ -131,7 +133,7 @@ public class Main {
                 }
             } catch (Exception ex) {		// catch exceptions thrown by insert, delete or contains and print appropriate error message
                 if (ex instanceof IllegalArgumentException) {
-                    results.append("Error in " + str.toLowerCase() + ": IllegalArgumentException raised\n");
+                    results.append("Error in " + str.substring(0, str.indexOf(":")).toLowerCase() + ": IllegalArgumentException raised\n");
                     /*if (bool == null) {
                         results.append("Error in insert: IllegalArgumentException raised\n");
                     } else if (!bool) {
@@ -154,6 +156,6 @@ public class Main {
         fileOut.overwriteToFile((results.deleteCharAt(results.length()-1)).toString());
         
         // Print output file name to console
-        out.println("Output sent to file: " + outputFileName);
+        out.println("Output sent to file: " + outputFileName + " in the same directory as Main.java");
     }
 }

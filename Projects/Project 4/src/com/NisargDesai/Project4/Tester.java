@@ -1,8 +1,9 @@
-package com.NisargDesai.Project4;
+// package com.NisargDesai.Project4;
 
 import static java.lang.System.out;
 
 public class Tester {
+
     public static void main(String[] args) {
 
         RedBlackTree<Integer> redBlackTree = new RedBlackTree<>();
@@ -18,15 +19,17 @@ public class Tester {
         }
 
         redBlackTree.insert(50);
-        out.println(redBlackTree);
+        // out.println(redBlackTree);
         redBlackTree.insert(25);
-        out.println(redBlackTree);
+        // out.println(redBlackTree);
         redBlackTree.insert(75);
-        out.println(redBlackTree);
+        // out.println(redBlackTree);
         redBlackTree.insert(12);
-        out.println(redBlackTree);
+        // out.println(redBlackTree);
         redBlackTree.insert(37);
-        out.println(redBlackTree);
+        // out.println(redBlackTree);
+        redBlackTree.insert(6);
+        // out.println(redBlackTree);
 
     }
 }

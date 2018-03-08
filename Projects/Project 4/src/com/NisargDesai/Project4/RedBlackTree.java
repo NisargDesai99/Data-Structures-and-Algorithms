@@ -1,4 +1,4 @@
-package com.NisargDesai.Project4;
+// package com.NisargDesai.Project4;
 
 import static java.lang.System.out;
 
@@ -7,11 +7,26 @@ public class RedBlackTree<E extends Comparable<E>> {
     static final boolean RED = false;
     static final boolean BLACK = true;
 
+    Integer integer = 3;
+
     private static final int NONE = 0;
-    private static final int SINGLE = 1;
-    private static final int DOUBLE = 2;
-    private static final int RECOLOR = 3;
-    private static final int ROTATE = 4;
+    private static final int RECOLOR = 1;
+    private static final int ROTATE = 2;
+
+    private static final int LEFT_LEFT = 10;
+    private static final int LEFT_RIGHT = 11;
+    private static final int RIGHT_RIGHT = 12;
+    private static final int RIGHT_LEFT = 13;
+
+    private static final String ANSI_RESET = "\u001B[0m";
+    private static final String ANSI_BLACK = "\u001B[30m";
+    private static final String ANSI_RED = "\u001B[31m";
+    private static final String ANSI_GREEN = "\u001B[32m";
+    private static final String ANSI_YELLOW = "\u001B[33m";
+    private static final String ANSI_BLUE = "\u001B[34m";
+    private static final String ANSI_PURPLE = "\u001B[35m";
+    private static final String ANSI_CYAN = "\u001B[36m";
+    private static final String ANSI_WHITE = "\u001B[37m";
 
     Node<E> root;
 
@@ -31,7 +46,7 @@ public class RedBlackTree<E extends Comparable<E>> {
             nodeToInsert.direction = null;
             nodeToInsert.color = BLACK;
             root = nodeToInsert;
-            out.println("Inserted " + element + " Color: " + ((nodeToInsert.color)?"Black":"Red"));
+            // out.println("Inserted " + element + " Color: " + ((nodeToInsert.color)?"Black":"Red"));
             return true;
         }
 
@@ -52,30 +67,38 @@ public class RedBlackTree<E extends Comparable<E>> {
                     nodeToInsert.parent = iterator;
                     nodeToInsert.direction = Node.LEFT;
                     iterator.leftChild = nodeToInsert;
-                    out.println("Inserted " + element + " Color: " + ((nodeToInsert.color)?"Black":"Red"));
+                    // out.println("Inserted " + element + " Color: " + ((nodeToInsert.color)?"Black":"Red"));
+
+                    out.println(this);
 
                     rebalance(nodeToInsert);
 
                     return true;
                 }
                 iterator = iterator.leftChild;
+
             } else if (compareResult == 1) {
                 if (iterator.rightChild == null) {
                     nodeToInsert.parent = iterator;
                     nodeToInsert.direction = Node.RIGHT;
                     iterator.rightChild = nodeToInsert;
-                    out.println("Inserted " + element + " Color: " + ((nodeToInsert.color)?"Black":"Red"));
+                    // out.println("Inserted " + element + " Color: " + ((nodeToInsert.color)?"Black":"Red"));
+
+                    out.println(this);
 
                     rebalance(nodeToInsert);
 
                     return true;
                 }
                 iterator = iterator.rightChild;
+
             } else if (compareResult == 0) {
+                out.println(this);
                 return false;
             }
         }
 
+        out.println(this);
         return false;
     }
 
@@ -115,16 +138,15 @@ public class RedBlackTree<E extends Comparable<E>> {
         // if parent is red - is the uncle red too?
         // (code won't come here if parent is black)
         // does the current node have an uncle?
-        boolean hasUncle = hasUncle(current);
         Node<E> uncle = null;
-        if (hasUncle) {
+        if (hasUncle(current)) {
             Node<E> grandparent = current.parent.parent;
             if (current.parent.direction == Node.LEFT) {
                 uncle = grandparent.rightChild;
             } else if (current.parent.direction == Node.RIGHT) {
                 uncle = grandparent.leftChild;
             }
-        } else {    // if no uncle, rotate
+        } else {            // if no uncle, check for rotation
             return ROTATE;
         }
 
@@ -135,47 +157,75 @@ public class RedBlackTree<E extends Comparable<E>> {
         // throw new UnsupportedOperationException("isChangeNeeded(Node) has not been implemented.");
     }
 
-    private void executeChanges(int change, Node<E> current) {
+    private Node<E> executeChanges(int change, Node<E> insertedNode) {
         switch (change) {
             case NONE:
-                return;
+                return null;
             case RECOLOR:
-                recolor(current);
-                break;
+                return recolor(insertedNode);
             case ROTATE:
-                rotate();
-                break;
+                rotate(insertedNode);
+                return null;
             default:
-                return;
+                return null;
         }
     }
 
-    private void rotate() {
-        throw new UnsupportedOperationException("rotate() has not been implemented.");
+    private void rotate(Node<E> node) {
+
+        Node<E> parent = node.parent;
+
+        // single
+        if (node.parent.direction == Node.LEFT && node.direction == Node.LEFT)
+            singleRotation(node, LEFT_LEFT);
+
+        if (node.direction == Node.RIGHT && !node.parent.direction == Node.RIGHT)
+            singleRotation(node, RIGHT_RIGHT);
+
+        // double
+        if (node.parent.direction == Node.LEFT && node.direction == Node.RIGHT)
+            doubleRotation(node, LEFT_RIGHT);
+
+        if (node.parent.direction === Node.RIGHT && node.direction == Node.LEFT) {
+            doubleRotation(node, RIGHT_LEFT);
+        }
+
+        // throw new UnsupportedOperationException("rotate() has not been implemented.");
     }
 
-    private void recolor(Node<E> current) {
+    private Node<E> recolor(Node<E> current) {
 
-        if (current == this.root) {
-            current.color = BLACK;
+//            Recolor Steps:
+//
+//            Node to insert = child
+//            1. Insert child normally
+//            2. If child is root, change color to Black
+//            3. If child's uncle is Red
+//                a. Change parent and uncle to Black
+//                b. Change grandparent to Red
+//                c. Iterate child to grandparent (child = child.grandparent)
+//
+//            Steps 2 and 3 are repeated by the rebalance() method.
+//            It keeps iterating to find changes until everything is fine.
+        Node<E> grandparent = current.parent.parent;
+
+        if (grandparent.leftChild != null) {
+            grandparent.leftChild.color = BLACK;
         }
 
-        Node<E> parent = current.parent;
-
-        if (parent.parent == null) {    // means its a root
-            Node<E> grandparent = parent.parent;
-            grandparent.leftChild.color = !(grandparent.leftChild.color);
-            grandparent.rightChild.color = !(grandparent.rightChild.color);
+        if (grandparent.rightChild != null) {
+            grandparent.rightChild.color = BLACK;
         }
 
-        while (parent != null) {
-            if (parent == this.root) {
-                return;
-            }
-            parent.color = !parent.color;
-            parent = parent.parent;
+        if (grandparent == this.root) {
+            grandparent.color = BLACK;
+            return null;
         }
 
+        grandparent.color = RED;
+        current = grandparent;
+
+        return current;
         // throw new UnsupportedOperationException("recolor() has not been implemented.");
     }
 
@@ -183,19 +233,60 @@ public class RedBlackTree<E extends Comparable<E>> {
 
         int changeNeeded = isChangeNeeded(insertedNode);
 
-        while (changeNeeded != NONE) {
+        if (changeNeeded == RECOLOR) {
+            while (changeNeeded != NONE) {
+                out.println("RECOLORING: " + insertedNode);
+                insertedNode = executeChanges(changeNeeded, insertedNode);
+                changeNeeded = (insertedNode != null) ? isChangeNeeded(insertedNode) : NONE;
+            }
+            out.println(this);
+            return;
+        }
+
+        if (changeNeeded == ROTATE) {
             executeChanges(changeNeeded, insertedNode);
-            changeNeeded = isChangeNeeded(insertedNode);
+            return;
         }
 
         // throw new UnsupportedOperationException("rebalance() has not been implemented.");
     }
 
-    private void singleRotation() {
-        throw new UnsupportedOperationException("singleRotation() has not been implemented.");
+    private void singleRotation(Node<E> node, int rotationCase) {
+
+        if (rotationCase == LEFT_LEFT) {
+
+            Node<E> parent = node.parent;
+            Node<E> grandparent = parent.parent;
+
+            parent.color = !parent.color;
+            grandparent.color = !grandparent.color;
+
+            parent.parent = null;
+            grandparent.parent = parent;
+            grandparent.leftChild = null;
+            parent.rightChild = grandparent;
+        }
+
+        if (rotationCase == RIGHT_RIGHT) {
+
+            Node<E> parent = node.parent;
+            Node<E> grandparent = parent.parent;
+
+            parent.color = !parent.color;
+            grandparent.color = !grandparent.color;
+
+            parent.parent = null;
+            grandparent.parent = parent;
+            grandparent.rightChild = null;
+            parent.leftChild = grandparent;
+        }
+
     }
 
-    private void doubleRotation() {
+    private void doubleRotation(Node<E> node, int rotationCase) {
+
+
+
         throw new UnsupportedOperationException("doubleRotation() has not been implemented.");
     }
 
@@ -210,9 +301,8 @@ public class RedBlackTree<E extends Comparable<E>> {
 //            strBuilder.append(root.toString());
 //            strBuilder.append(" ");
 //        } else {
-        strBuilder.append(root.toString() + ((root.color)?"Black":"Red"));	// if not, only append the root
+        strBuilder.append(((root.color)?ANSI_BLACK:ANSI_RED) + root.toString() + ANSI_RESET); /*+ ((root.color)?"Black":"Red")*/	// if not, only append the root
         strBuilder.append(" ");
-//        }
 
         preOrderToString(root.leftChild, strBuilder);		// go through the left tree first
         preOrderToString(root.rightChild, strBuilder);	    // go through the right tree after
@@ -236,7 +326,7 @@ public class RedBlackTree<E extends Comparable<E>> {
 
         @Override
         public int compareTo(E o) {
-            return o.compareTo(this.element);
+            return this.element.compareTo(o);
         }
 
         public String toString() {
@@ -246,3 +336,10 @@ public class RedBlackTree<E extends Comparable<E>> {
 
     }
 }
+
+
+
+/*
+    Try recolor first
+    then try rotation
+ */

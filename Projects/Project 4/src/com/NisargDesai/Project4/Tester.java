@@ -1,4 +1,4 @@
-// package com.NisargDesai.Project4;
+package com.NisargDesai.Project4;
 
 import static java.lang.System.out;
 
@@ -18,18 +18,23 @@ public class Tester {
             }
         }
 
-        redBlackTree.insert(50);
-        // out.println(redBlackTree);
-        redBlackTree.insert(25);
-        // out.println(redBlackTree);
-        redBlackTree.insert(75);
-        // out.println(redBlackTree);
-        redBlackTree.insert(12);
-        // out.println(redBlackTree);
-        redBlackTree.insert(37);
-        // out.println(redBlackTree);
-        redBlackTree.insert(6);
-        // out.println(redBlackTree);
+//        redBlackTree.insert(50);
+//        out.println(redBlackTree);
+//        redBlackTree.insert(25);
+//        out.println(redBlackTree);
+//        redBlackTree.insert(75);
+//        out.println(redBlackTree);
+//        redBlackTree.insert(12);
+//        out.println(redBlackTree);
+//        redBlackTree.insert(37);
+//        out.println(redBlackTree);
+//        redBlackTree.insert(6);
+//        out.println(redBlackTree);
+
+        redBlackTree.insert(10);
+        redBlackTree.insert(20);
+        redBlackTree.insert(30);
+        redBlackTree.insert(15);
 
     }
 }

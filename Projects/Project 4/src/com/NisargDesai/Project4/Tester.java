@@ -83,7 +83,7 @@ public class Tester {
 //
 //        out.println("Contains 43?: " + redBlackTree.contains(43));
 //        out.println("Contains 99?: " + redBlackTree.contains(99));
-
+//
 //        out.println("insert 50");
 //        redBlackTree.insert(50);
 //        out.println(redBlackTree);
@@ -127,40 +127,48 @@ public class Tester {
 //        out.println("RESULT: " + redBlackTree);
 
         // EXAMPLE INPUT 1
-        out.println("insert 98");
-        redBlackTree.insert(98);
-        out.println(redBlackTree);
-
-        out.println("insert -68");
-        redBlackTree.insert(-68);
-        out.println(redBlackTree);
-
-        out.println("insert 55");
-        redBlackTree.insert(55);
-        out.println(redBlackTree);
-
-        out.println("insert 45");
-        redBlackTree.insert(45);
-        out.println(redBlackTree);
-
-        // PrintTree command
-
-        out.println("Contains 45?: " + redBlackTree.contains(45));
-
-        out.println("insert 84");
-        redBlackTree.insert(84);
-        out.println(redBlackTree);
-
-        out.println("insert 32");
-        redBlackTree.insert(32);
-        out.println(redBlackTree);
-
-        out.println("insert 132");
-        redBlackTree.insert(132);
-        out.println(redBlackTree);
-
-        out.println("insert 45");
-        redBlackTree.insert(45);
-        out.println(redBlackTree);
+//        out.println("insert 98");
+//        redBlackTree.insert(98);
+//        out.println(redBlackTree);
+//
+//        out.println("insert -68");
+//        redBlackTree.insert(-68);
+//        out.println(redBlackTree);
+//
+//        out.println("insert 55");
+//        redBlackTree.insert(55);
+//
+//        // redBlackTree.testPrint();
+//
+//        out.println(redBlackTree);
+//
+//        out.println("insert 45");
+//        redBlackTree.insert(45);
+//        out.println(redBlackTree);
+//
+//        // PrintTree command
+//
+//        out.println("Contains 45?: " + redBlackTree.contains(45));
+//
+//        out.println("insert 84");
+//        redBlackTree.insert(84);
+//        out.println(redBlackTree);
+//
+//        out.println("insert 32");
+//        redBlackTree.insert(32);
+//        out.println(redBlackTree);
+//
+//        out.println("insert 132");
+//        redBlackTree.insert(132);
+//        out.println(redBlackTree);
+//
+//        out.println("Contains 45?: " + redBlackTree.contains(45));
+//        out.println("Contains 32?: " + redBlackTree.contains(32));
+//
+//        out.println("insert 45");
+//        redBlackTree.insert(45);
+//        out.println(redBlackTree);
+//
+//        out.println("RESULT: " + redBlackTree);
     }
 }

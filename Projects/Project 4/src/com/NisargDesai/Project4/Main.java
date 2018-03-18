@@ -45,6 +45,7 @@ public class Main {
 
     	if (commandsList.get(0).equals("Integer")) {
     		integerRedBlackTree = new RedBlackTree<>();
+    		commandsList.remove(0);
     		fileOutput = run(integerRedBlackTree, INTEGER, commandsList);
     	} else if (commandsList.get(0).equals("String")) {
     		stringRedBlackTree = new RedBlackTree<>();

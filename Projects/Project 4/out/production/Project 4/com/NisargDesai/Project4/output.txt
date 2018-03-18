@@ -1,0 +1,14 @@
+Error in Line: Integer
+True
+True
+True
+True
+[37m55[0m [37m-68[0m [31m45[0m [37m98[0m
+False
+True
+True
+True
+False
+[37m55[0m [37m32[0m [31m-68[0m [31m45[0m [37m98[0m [31m84[0m [31m132[0m
+Error in Line: Insert
+Error in Line: hih

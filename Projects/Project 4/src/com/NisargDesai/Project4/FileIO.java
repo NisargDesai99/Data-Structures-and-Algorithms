@@ -72,8 +72,9 @@ public class FileIO {
                 }
                 closeFileForReading();
             } else {
-                // closeFileForReading();
-                return null;
+                // return an empty list if the file did not open
+                list.clear();
+                return list;
             }
         } catch (Exception ex) {
             out.println("Error reading file.");
@@ -90,7 +91,6 @@ public class FileIO {
             if (openFileForReading()) {
                 content = fileReader.getEncoding();
                 out.println(content);
-
                 closeFileForReading();
             }
         } catch (Exception ex) {
@@ -113,8 +113,8 @@ public class FileIO {
                     bufferedWriter.write("\n");
                     counter++;
                 }
+                closeFileForWriting();
             }
-            closeFileForWriting();
         } catch (Exception ex) {
             out.println("Error writing to file.");
         }
@@ -123,9 +123,9 @@ public class FileIO {
     public void appendToFile(String strToAppend) {
         try {
             if (openFileForWriting(true)) {
-                bufferedWriter.append(strToAppend + "\n");
+                bufferedWriter.append(strToAppend);
+                closeFileForWriting();
             }
-            closeFileForWriting();
         } catch (Exception ex) {
             out.println("Error appending to file.");
         }
@@ -133,11 +133,20 @@ public class FileIO {
 
     public void overwriteToFile(String strToWrite) {
         try {
-            openFileForWriting(false);
+            if (openFileForWriting(false)) {
+                this.bufferedWriter.write(strToWrite);
+                closeFileForWriting();
+            }
+        } catch (Exception ex) {
+            out.println("Error writing to file.");
+        }
+    }
 
-            this.bufferedWriter.write(strToWrite);
-
-            bufferedWriter.close();
+    public void clearFile() {
+        try {
+            if (openFileForWriting(false)) {
+                closeFileForWriting();
+            }
         } catch (Exception ex) {
             out.println("Error writing to file.");
         }
@@ -145,8 +154,8 @@ public class FileIO {
 
     private void closeFileForReading() {
         try {
-            fileReader.close();
             bufferedReader.close();
+            fileReader.close();
         } catch (Exception ex) {
             out.println("Error closing the file for reading.");
         }
@@ -154,8 +163,8 @@ public class FileIO {
 
     private void closeFileForWriting() {
         try {
-            fileWriter.close();
             bufferedWriter.close();
+            fileWriter.close();
         } catch (Exception ex) {
             out.println("Error closing the file for writing.");
         }

@@ -1,6 +1,9 @@
-
-
 import static java.lang.System.out;
+
+/*
+    E must extend Comparable...
+        this is a necessity for the comparisons to work for the insert and contains methods
+*/
 
 public class RedBlackTree<E extends Comparable<E>> {
 
@@ -28,34 +31,58 @@ public class RedBlackTree<E extends Comparable<E>> {
         this.root = null;
     }
 
-    public boolean insert(E newElement) throws NullPointerException {
+    /*
+        Method to insert a new node into the red black tree
+        Look at comments inside the method for more details
+    */
+    public boolean insert(E element) throws NullPointerException {
 
-        if (newElement == null) {
+        // If inserted element is null, throw a nullptr exception
+        if (element == null) {
             throw new NullPointerException("The element you want to insert is null. Try again.");
         }
 
-        Node nodeToInsert = new Node(newElement);
+        Node nodeToInsert = new Node(element);
         nodeToInsert.color = RED;
 
-        if (root == null) {
+        // If no nodes have been inserted, create a root and return true
+        if (this.root == null) {
             nodeToInsert.direction = null;
             nodeToInsert.color = BLACK;
-            root = nodeToInsert;
+            this.root = nodeToInsert;
             return true;
         }
 
-        if (newElement.compareTo(this.root.element) == 0) { return false; }
+        /*
+            If the element in question 
+                is the same as the root's element (meaning it already exists)
+                return false
+        */
+        if (element.compareTo(this.root.element) == 0) {
+            return false;
+        }
 
         Node iterator = this.root;
         int compareResult;
 
+        /*
+            iterate through the tree by comparing each node's element with the element in question
+            if the new element is less than the current iterator node
+                insert if the left child is empty
+                then rebalance
+                OR
+                move left
+            if the new element is greater than the current iterator node
+                insert if the right child is empty
+                then rebalance
+                OR
+                move right
+            if they are equal (meaning the "new" element already exists)
+                return false;
+        */
         while (iterator != null) {
             compareResult = nodeToInsert.element.compareTo(iterator.element);
-            // if (newElement instanceof String) {
-            //     if (newElement.equals(iterator.element)) {
-            //         return false;
-            //     }
-            // }
+
             if (compareResult < 0) {
                 if (iterator.leftChild == null) {
                     nodeToInsert.parent = iterator;
@@ -90,36 +117,29 @@ public class RedBlackTree<E extends Comparable<E>> {
                 return false;
             }
         }
-
         return false;
     }
 
-    /*public void iterate() {
-        iterate("Leo");
-    }*/
-
-    public void iterate(E element) {
-        Node itr = this.root;
-        int compareResult;
-
-        while (itr != null) {
-            compareResult = element.compareTo(itr.element);
-            if (compareResult < 0) {
-                out.println(itr);
-                itr = itr.leftChild;
-            } else if (compareResult > 0) {
-                out.println(itr);
-                itr = itr.rightChild;
-            } else {
-                out.println(itr);
-            }
-        }
-    }
-
+    /*
+        Check if a certain element exists in the tree
+        iterate through the tree by comparing each node's element with the element the user is searching for
+            if the new element is less than the current iterator node
+                move left
+            if the new element is greater than the current iterator node
+                move right
+            if they are equal (meaning the element already exists)
+                return true;
+        
+        if the iterator exits the loop
+            it means that the element does not exist 
+            so just return false
+    */
     public boolean contains(E element) {
 
-        if (element == null) return false;
-        if (element == this.root.element) return false;
+        if (element == null)
+            return false;
+        if (element == this.root.element)
+            return false;
 
         Node itr = this.root;
         int compareResult;
@@ -138,6 +158,16 @@ public class RedBlackTree<E extends Comparable<E>> {
         return false;
     }
 
+    /*
+        Calls the isChangeNeeded(Node) method to check what kind of change is needed if any
+        If a recolor is needed
+            Perform recolor using the executeChanges(Node) method
+            Keep looping until no change is needed
+            This is because if something gets recolored, we might need another recolor or rotation
+            When no change is needed, return back to insert(E)
+        If a rotation is needed
+            Perform rotation using the executeChanges(Node) method and return back to insert(E)
+    */
     private void rebalance(Node insertedNode) {
 
         int changeNeeded = isChangeNeeded(insertedNode);
@@ -146,7 +176,6 @@ public class RedBlackTree<E extends Comparable<E>> {
             while (changeNeeded != NONE) {
                 insertedNode = executeChanges(changeNeeded, insertedNode);
                 changeNeeded = ((insertedNode == null) ? NONE : isChangeNeeded(insertedNode));
-                // if (changeNeeded == RECOLOR) out.println("recolor");
             }
             return;
         }
@@ -157,10 +186,17 @@ public class RedBlackTree<E extends Comparable<E>> {
 
     }
 
+    /*
+        Find what kind of change is needed (recolor or rotation)
+        Recolor is needed if the new node, it's parent, and it's uncle are all red
+        A rotation is needed when new node and parent are both red 
+            but the new node doesn't have an uncle or the uncle is black
+    */
     private int isChangeNeeded(Node insertedNode) {
 
         boolean isParentRed = !(insertedNode.parent.color);
-        if (!isParentRed) return NONE;
+        if (!isParentRed)
+            return NONE;
 
         Node uncle = null;
         if (hasUncle(insertedNode)) {
@@ -171,7 +207,7 @@ public class RedBlackTree<E extends Comparable<E>> {
                 uncle = grandparent.leftChild;
             }
         } else {
-            return ROTATE;      // parent is red, and uncle does not exist, so it needs a rotation
+            return ROTATE; // parent is red, and uncle does not exist, so it needs a rotation
         }
 
         // uncle is not null and uncle color is red -> recolor
@@ -181,33 +217,45 @@ public class RedBlackTree<E extends Comparable<E>> {
         return (isUncleRed) ? RECOLOR : ROTATE;
     }
 
+    /*
+        Checks whether a given node n has an uncle or not
+    */
     private boolean hasUncle(Node n) {
         boolean hasGrandparent = (n.parent.parent != null);
-        if (!hasGrandparent) return false;
+        if (!hasGrandparent)
+            return false;
 
         Node grandparent = n.parent.parent;
-        return (grandparent.leftChild != null
-                && grandparent.rightChild != null);
+        return (grandparent.leftChild != null && grandparent.rightChild != null);
     }
 
+    /*
+        Takes in a change integer 
+            (this can be one of the static final ints at the top: RECOLOR, ROTATE)
+        and takes in the newly inserted node
+        Using a switch case statement
+            it calls the right method to execute the change
+    */
     private Node executeChanges(int change, Node insertedNode) {
 
         switch (change) {
-            case NONE:
-                return null;
-            case RECOLOR:
-                return recolor(insertedNode);
-            case ROTATE:
-                rotate(insertedNode);
-                return null;
-            default:
-                return null;
+        case NONE:
+            return null;
+        case RECOLOR:
+            return recolor(insertedNode);
+        case ROTATE:
+            rotate(insertedNode);
+            return null;
+        default:
+            return null;
         }
     }
 
+    /*
+        Performs a recolor of the insertedNode's parent, uncle and grandparent
+        makes sure that if the grandparent is the root, then its color is blac
+    */
     private Node recolor(Node insertedNode) {
-
-        out.println("RECOLOR");
 
         Node grandparent = insertedNode.parent.parent;
 
@@ -230,6 +278,18 @@ public class RedBlackTree<E extends Comparable<E>> {
         return insertedNode;
     }
 
+    /*
+        Checks the insertedNode and it's parent to see which child they are (left or right)
+        Based on this, it calls one of the rotation methods with a particular rotation case
+        Rotation cases include:
+            Left Left (needs Single Rotation)
+            Right Right (needs Single Rotation)
+            Left Right (needs Double Rotation)
+            Right Left (needs Double Rotation)
+
+        Example method call: singleRotation(insertedNode, LEFT_LEFT)
+        where LEFT_LEFT is the rotation case
+    */
     private void rotate(Node insertedNode) {
 
         Node parent = insertedNode.parent;
@@ -260,52 +320,91 @@ public class RedBlackTree<E extends Comparable<E>> {
 
     }
 
+    /*
+        Single rotation method for the Left Left and Right Right cases
+        The node being operated on is called "node" in this method
+    */
     private void singleRotation(Node node, int rotationCase) {
 
         Node parent = node.parent;
         Node grandparent = node.parent.parent;
 
+        // set parent and grandparent colors
+        // this is the same for both cases
         parent.color = BLACK;
         grandparent.color = RED;
 
+        /*
+            set node's parent's parent to node's greatgrandparent
+            if grandparent is a left child
+                set node's greatgrandparent's left child to node's parent
+                fix node's parent's direction and color
+            after that, set grandparent's and parent's children correctly
+            this applies to both cases
+            the only difference is in the direction of the children (left or right children)
+        */
         if (rotationCase == LEFT_LEFT) {
-            out.println("LEFT LEFT");
+            
+            Node greatGrandparent = grandparent.parent;
+            if (greatGrandparent != null) {
 
-            Node sibling = parent.rightChild;
-            grandparent.leftChild = sibling;
+                parent.parent = greatGrandparent;
 
-            if (sibling != null) {
-                sibling.direction = Node.LEFT;
+                if (grandparent.direction == Node.LEFT) {
+                    greatGrandparent.leftChild = parent;
+                    parent.direction = Node.LEFT;
+                    parent.color = BLACK;
+                    grandparent.leftChild = null;
+                } else if (grandparent.direction = Node.RIGHT) {
+                    greatGrandparent.rightChild = parent;
+                    parent.direction = Node.RIGHT;
+                    parent.color = BLACK;
+                    grandparent.leftChild = null;
+                }
+
             }
 
-            parent.parent = grandparent.parent;
-            if (parent.parent != null) {
-                parent.parent.rightChild = parent;
-                parent.direction = Node.RIGHT;
+            grandparent.leftChild = parent.rightChild;
+            if (grandparent.leftChild != null) {
+                grandparent.leftChild.parent = grandparent;
+                grandparent.leftChild.direction = Node.LEFT;
             }
-            grandparent.parent = parent;
 
             parent.rightChild = grandparent;
+            grandparent.color = RED;
+            grandparent.parent = parent;
             grandparent.direction = Node.RIGHT;
 
         } else if (rotationCase == RIGHT_RIGHT) {
-            out.println("RIGHT RIGHT");
 
-            Node sibling = parent.leftChild;
-            grandparent.rightChild = sibling;
+            Node greatGrandparent = grandparent.parent;
+            if (greatGrandparent != null) {
 
-            if (sibling != null) {
-                sibling.direction = Node.RIGHT;
+                parent.parent = greatGrandparent;
+
+                if (grandparent.direction == Node.LEFT) {
+                    greatGrandparent.leftChild = parent;
+                    parent.direction = Node.LEFT;
+                    parent.color = BLACK;
+                    grandparent.rightChild = null;
+                } else if (grandparent.direction = Node.RIGHT) {
+                    greatGrandparent.rightChild = parent;
+                    parent.direction = Node.RIGHT;
+                    parent.color = BLACK;
+                    grandparent.rightChild = null;
+                }
+
             }
 
-            parent.parent = grandparent.parent;
-            if (parent.parent != null) {
-                parent.parent.leftChild = parent;
-                parent.direction = Node.LEFT;
+            grandparent.rightChild = parent.leftChild;
+            if (grandparent.rightChild != null) {
+                grandparent.rightChild.parent = grandparent;
+                grandparent.rightChild.direction = Node.RIGHT;
             }
-            grandparent.parent = parent;
 
             parent.leftChild = grandparent;
+            grandparent.color = RED;
+            grandparent.parent = parent;
             grandparent.direction = Node.LEFT;
 
         } else {
@@ -313,6 +412,7 @@ public class RedBlackTree<E extends Comparable<E>> {
             return;
         }
 
+        // if grandparent was the root, make sure that the parent, after rotation, is set as the root
         if (this.root.element.compareTo(grandparent.element) == 0) {
             this.root = parent;
             parent.color = BLACK;
@@ -322,18 +422,26 @@ public class RedBlackTree<E extends Comparable<E>> {
 
     }
 
+    /*
+        Double rotation method for the Left Right and Right Left cases
+        The node being operated on is named "node" in this method
+    */
     private void doubleRotation(Node node, int rotationCase) {
 
         Node parent = node.parent;
         Node grandparent = node.parent.parent;
 
-        out.println("grandparent: " + grandparent);
-
         Node nodeLeftChild = node.leftChild;
         Node nodeRightChild = node.rightChild;
 
+        /*
+            If a grandparent exists
+                the node's parent should be set to its grandparent's parent
+            If grandparent has a direction (left or right) (if its neither then grandparent is the root)
+                set node's direction to the direction of the grandparent
+                set node as the <direction>Child of grandparent's parent (great grandparent)
+        */
         if (grandparent != null) {
-
             node.parent = grandparent.parent;
 
             if (grandparent.direction == null) {
@@ -349,12 +457,20 @@ public class RedBlackTree<E extends Comparable<E>> {
             node.parent = null;
         }
 
+        // set colors to what they should be at the end of the rotation
+        // this is the same for both double rotation cases
         node.color = BLACK;
         parent.color = RED;
         grandparent.color = RED;
 
+        /*
+            set the node as the parent of its parent and grandparent
+            make sure the children nodes of the node are set correctly 
+                as children of node's original parent and grandparent
+            this goes for both cases
+            the only difference is in the side (left or right) that something gets set to
+        */
         if (rotationCase == LEFT_RIGHT) {
-            out.println("LEFT RIGHT");
 
             parent.parent = node;
             grandparent.parent = node;
@@ -381,10 +497,7 @@ public class RedBlackTree<E extends Comparable<E>> {
                 grandparent.leftChild = null;
             }
 
-        }
-
-        if (rotationCase == RIGHT_LEFT) {
-            out.println("RIGHT LEFT");
+        } else if (rotationCase == RIGHT_LEFT) {
 
             parent.parent = node;
             grandparent.parent = node;
@@ -410,8 +523,12 @@ public class RedBlackTree<E extends Comparable<E>> {
             } else {
                 parent.leftChild = null;
             }
+        } else {
+            out.println("There was an error. Try again. Rotation Case: " + rotationCase);
+            return;
         }
 
+        // if grandparent was the root, make sure that the node, after rotation, is set as the root
         if (this.root.element.compareTo(grandparent.element) == 0) {
             this.root = node;
             node.color = BLACK;
@@ -421,6 +538,9 @@ public class RedBlackTree<E extends Comparable<E>> {
 
     }
 
+    /*
+        Returns a string representation of the tree with a pre-order traversal
+    */
     public String toString() {
         StringBuilder strBuilder = new StringBuilder();
         preOrderToStringFile(this.root, strBuilder);
@@ -428,43 +548,34 @@ public class RedBlackTree<E extends Comparable<E>> {
         return strBuilder.toString();
     }
 
+    /*
+        This method is to be used when printing results to a terminal or cmd
+        It uses Ansi colors instead of asterisks to mark red/black nodes. 
+        Black nodes are printed in white color, because my terminal is dark themed.
+    */
     private String preOrderToStringTerminal(Node n, StringBuilder strBuilder) {
-        // out.print(ANSI_GREEN + n + ANSI_RESET);
-        // out.println();
         if (n == null) { // if root is null, append a "" and return to start going back up the recursion
-            // strBuilder.append(ANSI_WHITE + "NIL " + ANSI_RESET);
             strBuilder.append("");
             return strBuilder.toString();
         }
 
-        strBuilder.append(
-                ((n.color) ? ANSI_WHITE : ANSI_RED) + n.toString() + ANSI_RESET); /*+ ((root.color)?"Black":"Red")*/ // if not, only append the root
+        strBuilder.append(((n.color) ? ANSI_WHITE : ANSI_RED) + n.toString() + ANSI_RESET);
         strBuilder.append(" ");
-
-        //        out.print(((n.color)?ANSI_WHITE:ANSI_RED) + n.toString() + ANSI_RESET + " ");
-        //        out.print(ANSI_GREEN + n.rightChild + ANSI_RESET);
 
         preOrderToStringTerminal(n.leftChild, strBuilder); // go through the left tree first
         preOrderToStringTerminal(n.rightChild, strBuilder); // go through the right tree after
-        // makes it pre-order
+
         return strBuilder.toString(); // return
     }
 
     private String preOrderToStringFile(Node n, StringBuilder strBuilder) {
-        // out.print(ANSI_GREEN + n + ANSI_RESET);
-        // out.println();
         if (n == null) { // if root is null, append a "" and return to start going back up the recursion
-            // strBuilder.append(ANSI_WHITE + "NIL " + ANSI_RESET);
             strBuilder.append("");
             return strBuilder.toString();
         }
 
-        strBuilder.append(
-                ((n.color) ? "" : "*") + n.toString()); /*+ ((root.color)?"Black":"Red")*/ // if not, only append the root
+        strBuilder.append(((n.color) ? "" : "*") + n.toString());
         strBuilder.append(" ");
-
-        //        out.print(((n.color)?ANSI_WHITE:ANSI_RED) + n.toString() + ANSI_RESET + " ");
-        //        out.print(ANSI_GREEN + n.rightChild + ANSI_RESET);
 
         preOrderToStringFile(n.leftChild, strBuilder); // go through the left tree first
         preOrderToStringFile(n.rightChild, strBuilder); // go through the right tree after
@@ -486,12 +597,13 @@ public class RedBlackTree<E extends Comparable<E>> {
 
         private Node() {  }
 
-        private Node(E element) { this.element = element; }
+        private Node(E element) {
+            this.element = element;
+        }
 
         public String toString() {
             return element.toString();
         }
-
     }
 
 }

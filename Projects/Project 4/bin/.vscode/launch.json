@@ -37,8 +37,7 @@
             "request": "launch",
             "cwd": "${workspaceFolder}",
             "console": "internalConsole",
-            "stopOnEntry": true,
-            "jdkPath": "${env:JAVA_HOME}/bin",
+            "stopOnEntry": false,
             "mainClass": "src.com.NisargDesai.Project4.Main",
             "projectName": "Project 4",
             "args": ""

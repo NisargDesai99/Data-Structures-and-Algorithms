@@ -4,45 +4,29 @@ import static java.lang.System.out;
 
 public class Test {
 	public static void main(String[] args) {
-		Scanner scanner = new Scanner(System.in);
-		Random rand = new Random();
-
-		// Test array -- randomly generate one for actual program
-		int[] arr = new int[] { 3,1,4,5,2 };
-		printArray(arr);
-
-		quickSort(arr, 0, arr.length - 1);
-		printArray(arr);
-	}
-
-	public static void quickSort(int[] arr, int low, int hi) {
-		if (low + CUTOFF <= hi) {
-			int pivot = median3(a, low, hi);
-
-			int i = low, j = hi - 1;
-
-			for ( ; ; ) {
-				while ( a[++i].compareTo(pivot) < 0 ) {  }
-				while ( a[--j].compareTo(pivot) > 0 ) {  }
-
-				if (i < j)
-					swap(a, i, j);
-				else
-					break;
-			}
-
-			swap(a, i, hi - 1);
-
-			quickSort(a, low, i - 1);
-			quickSort(a, i + 1, hi);
-		}
-
-		else
-			insertionSort(a, low, hi);
-	}
-
-
-	public void insertionSort(int[] arr, int left, int right) {
 		
+		// Quicksort quicksort = new Quicksort(10, 100);
+		Quicksort quicksort = new Quicksort(new int[] { 95, 92, 26, 37, 48, 99, 0, 67, 34, 41 });
+
+		// Quicksort quicksort = new Quicksort(new int[] { 4,8,66,35,74,33,3,46,91,46 });
+
+		out.println("Before sort");
+		quicksort.printArray();
+
+		// Scanner scanner = new Scanner(System.in);
+		// out.println("Press Enter to continue...");
+		// scanner.nextLine();
+
+		quicksort.sort(0);
+		out.println("After sort");
+		quicksort.printArray();
 	}
+
+	
 }
+
+
+/*
+	4 8 66 35 74 33 3 46 91 46
+	Tried sorting with pivot type 1 - First Element as pivot
+*/

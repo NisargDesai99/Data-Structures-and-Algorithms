@@ -1,9 +1,13 @@
-Name:       Nisarg Desai
-NetID:      npd160030
-Project:    1. Prime Numbers using Sieve of Eratosthenes
+# Project 1
 
-IDE Used:   I used VS Code to write the program. 
-            I used Terminal to run the program with the javac and java commands.
-            1. change directory to the one with the file
-            2. javac <name_of_file.java>
-            3. java <name_of_file>
+## Prime Numbers using Sieve of Eratosthenes
+
+Find all Prime Numbers between 2 and the user defined limit using an algorithm called the Sieve of Eratosthenes
+
+To run this program:
+
+1. Download this project
+2. Open Terminal/Command Line
+3. Change directory to this project
+4. javac <name_of_file.java>
+5. java <name_of_file>

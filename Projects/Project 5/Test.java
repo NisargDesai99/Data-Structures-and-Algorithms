@@ -8,7 +8,10 @@ public class Test {
 		// Quicksort quicksort = new Quicksort(10, 100);
 		// Quicksort1 quicksort = new Quicksort1(new int[] { 95, 92, 26, 37, 48, 99, 0, 67, 34, 41 });
 
-		Quicksort1 quicksort = new Quicksort1(new int[] { 4,8,66,35,74,33,3,46,91,46 });
+		// 4,8,66,35,74,33,3,46,91,46
+		// Quicksort1 quicksort = new Quicksort1(new int[] { 4,8,66,35,74,33,3,47,91,46 });
+
+		Quicksort quicksort = new Quicksort(new int[] { 95, 92, 26, 37, 48, 99, 0, 67, 34, 41 });
 
 		out.println("Before sort");
 		quicksort.printArray();
@@ -17,14 +20,12 @@ public class Test {
 		// out.println("Press Enter to continue...");
 		// scanner.nextLine();
 
-		quicksort.sort(0);
+		quicksort.sort(3);
 		out.println("After sort");
 		quicksort.printArray();
 	}
 
-	
 }
-
 
 /*
 	4 8 66 35 74 33 3 46 91 46

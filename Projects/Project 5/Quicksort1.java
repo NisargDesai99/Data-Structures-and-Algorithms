@@ -34,12 +34,12 @@ public class Quicksort1 {
 	// quicksort algorithm
 	public void sort(int pivotType) {
 		// call recursive quicksort
-		quicksort(this.array, 0, this.array.length, pivotType);
+		quicksort(this.array, 0, this.array.length - 1, pivotType);
 	}
 
 
 	public void quicksort(int[] arrToSort, int left, int right, int pivotType) {
-		if (left < right) {
+		if (left <= right) {
 			int partitionIndex = partition(arrToSort, left, right, pivotType);
 
 			quicksort(arrToSort, left, partitionIndex - 1, pivotType);
@@ -51,13 +51,9 @@ public class Quicksort1 {
 	public int partition(int[] arrToSort, int left, int right, int pivotType) {
 		
 		// Generate pivot and hide it at the end of the array
-		int pivotIndex = generatePivotIndex(pivotType, right);
-		swapReferences(arrToSort, pivotIndex, right - 1);
-		pivotIndex = right - 1;
-
-		// Scanner scanner = new Scanner(System.in);
-		// out.println("Press Enter to continue: ");
-		// scanner.nextLine();
+		int pivotIndex = generatePivotIndex(pivotType, left, right);
+		swapReferences(arrToSort, pivotIndex, right);
+		pivotIndex = right;
 
 		int i = left;
 		int j = right - 1;
@@ -65,11 +61,11 @@ public class Quicksort1 {
 		for ( ; ; ) {
 			while( arrToSort[ i ] < ( arrToSort[pivotIndex] ) /*< 0*/ ) {
 				i++;
-				if (i > j) break;
+				// if (i > j) break;
 			}
 			while( arrToSort[ j ] > ( arrToSort[pivotIndex] ) /*> 0*/ ) {
 				j--;
-				if (j < 0) break;
+				// if (j < 0) break;
 			}
 
 			if (i < j) {
@@ -80,7 +76,7 @@ public class Quicksort1 {
 			}
 		}
 
-		swapReferences( arrToSort, i, right - 1 ); // Restore pivot
+		swapReferences( arrToSort, i, right ); // Restore pivot
 		return i + 1;
 	}
 
@@ -92,17 +88,17 @@ public class Quicksort1 {
 
 	// generate a pivot based on the type of pivot that is specified
 	// should be called with (pivotType, 0) as parameters if pivot should not be random
-	private int generatePivotIndex(final int pivotType, int upperBound) {
+	private int generatePivotIndex(final int pivotType, int lowerBound, int upperBound) {
 		if (pivotType == RANDOM && upperBound > 0) {
-			return generateRandomNumber(upperBound);		// return random index to be a pivot
+			return getRandomNumRange(lowerBound, upperBound);		// return random index to be a pivot
 		} else if (pivotType == FIRST_ELEMENT) {
 			return 0;										// return first index to be a pivot
 		} else if (pivotType == MEDIAN_OF_RANDOM) {
 
-			int randA = generateRandomNumber(this.array.length);
-			int randB = generateRandomNumber(this.array.length);
-			int randC = generateRandomNumber(this.array.length);
-
+			int randA = getRandomNumUpperBound(this.array.length);
+			int randB = getRandomNumUpperBound(this.array.length);
+			int randC = getRandomNumUpperBound(this.array.length);
+ 
 			int a = this.array[randA];
 			int b = this.array[randB];
 			int c = this.array[randC];
@@ -156,9 +152,16 @@ public class Quicksort1 {
 	}
 
 	// genereate random number with an upper bound
-	private int generateRandomNumber(int limit) {
+	private int getRandomNumUpperBound(int upperBound) {
 		Random rand = new Random();
-		int randomNum = rand.nextInt(limit);
+		int randomNum = rand.nextInt(upperBound);
+		return randomNum;
+	}
+
+	// generate random number with a lower and upper bound
+	private int getRandomNumRange(int lowerBound, int upperBound) {
+		Random rand = new Random();
+		int randomNum = lowerBound + rand.nextInt(upperBound - lowerBound);
 		return randomNum;
 	}
 
@@ -173,7 +176,7 @@ public class Quicksort1 {
 	private void generateRandomArray(int size, int limit) {
 		this.array = new int[size];
 		for (int i = 0; i < size; i++) {
-			this.array[i] = generateRandomNumber(limit);
+			this.array[i] = getRandomNumUpperBound(limit);
 		}
 	}
 

@@ -1,76 +1,82 @@
-import java.util.Random;
 import java.util.Scanner;
+import java.io.File;
+import java.util.ArrayList;
+import java.time.Duration;
 import static java.lang.System.out;
 
 public class Main {
-	public static void main(String[] args) {
+    public static void main(String[] args) {
 
-		Scanner scanner = new Scanner(System.in);
-		Random rand = new Random();
+        Scanner scanner = new Scanner(System.in);
 
-		out.print("Enter the size: ");
-		int size = scanner.nextInt();
-		// int[] arr = new int[size];
+        int input = -1;
+        while (input <= 0) {
+            try {
+                out.print("Enter the size of the array: ");
+                input = scanner.nextInt();
+                scanner.nextLine();
+                out.print((input < 0) ? "Please enter a positive number.\n" : "");
+            } catch (Exception ex) {
+                scanner.nextLine();
+                out.println("Please enter an integer. ");
+            }
+        }
 
-		int[] arr = new int[] { 3,1,4,5,2 };
-		printArray(arr);
+        scanner.close();
 
-		// for (int i = 0; i < size; i++) {
-		// 	arr[i] = 0 + rand.nextInt(Integer.MAX_VALUE);
-		// }
+        int size = (input > 0) ? input : -1;
 
-		quickSort(arr, 0, arr.length - 1);
-		printArray(arr);
-	}
+        if (size == -1) {
+            out.println("Invalid size");
+        }
 
-	public static String printArray(int[] array) {
-		StringBuilder stringBuilder = new StringBuilder();
-		for (int i : array) {
-			stringBuilder.append(i).append(" ");
-		}
-		stringBuilder.deleteCharAt(stringBuilder.length()-1);
-		// out.println(stringBuilder);
-		return stringBuilder.toString();
-	}
+        String unsortedFileName = "unsorted.txt";
+        String sortedFileName = "sorted.txt";
 
-	public static int randomPivot(Random rand) {
-		return rand.nextInt(Integer.MAX_VALUE);
-	}
+        // Create Quicksort object with the input array
+        Quicksort quicksortObj = new Quicksort(size);
 
-	public static int partition(int[] arr, int lowIndex, int highIndex) {
+        // Print Unsorted to output file
+        FileIO unsortedFile = new FileIO(new File(unsortedFileName));
+        unsortedFile.clearFile();
+        unsortedFile.appendToFile("Array size: " + size);
+        unsortedFile.overwriteToFile(quicksortObj.toString());
+        
+        // Sort and measure times for each sort
+        // Print time measurements on the command line
+        
+        long startTime = System.nanoTime();
+        quicksortObj.sort(0);
+        long finishTime = System.nanoTime();
+        Duration timeRandPivot = Duration.ofNanos(finishTime - startTime);
 
-		int pivot = arr.length - 1;		// set pivot to last element
-		out.println("Pivot = " + arr[pivot]);
+        quicksortObj.reset();
+        startTime = System.nanoTime();
+        quicksortObj.sort(1);
+        finishTime = System.nanoTime();
+        Duration timeFirstPivot = Duration.ofNanos(finishTime - startTime);
 
-		int i = lowIndex - 1;					// set beginning index
-		out.println("i = " + i);
+        quicksortObj.reset();
+        startTime = System.nanoTime();
+        quicksortObj.sort(2);
+        finishTime = System.nanoTime();
+        Duration timeRandMedianPivot = Duration.ofNanos(finishTime - startTime);
 
-		for (int j = lowIndex; j < highIndex; j++) {	// move elements...
-			if (arr[j] < arr[pivot]) {
-				i = i + 1;
-				swap(arr, i, j);
-			}
-		}
+        quicksortObj.reset();
+        startTime = System.nanoTime();
+        quicksortObj.sort(3);
+        finishTime = System.nanoTime();
+        Duration timeFMLMedianPivot = Duration.ofNanos(finishTime - startTime);
 
-		swap(arr, i+1, highIndex);
+        out.println("Time for random pivot: " + timeRandPivot);
+        out.println("Time for first pivot: " + timeFirstPivot);
+        out.println("Time for median of random pivot: " + timeRandMedianPivot);
+        out.println("Time for median of first, middle, last pivot: " + timeFMLMedianPivot);
 
-		return i + 1;					// return the partition index value
-	}
+        // Print sorted array to sorted file
+        FileIO sortedFile = new FileIO(new File(sortedFileName));
+        sortedFile.clearFile();
+        sortedFile.appendToFile("Sorted: " + quicksortObj.toString());
 
-	public static void quickSort(int[] arr, int left, int right) {
-
-		out.println("quickSort(" + printArray(arr) + ", " + left + ", " + right + ")");
-		int partitionIndex = partition(arr, left, right);
-		out.println("Partition Index = " + partitionIndex);
-
-		quickSort(arr, left, partitionIndex - 1);
-		quickSort(arr, partitionIndex + 1, right);
-	}
-
-	public static void swap(int[] arr, int posOne, int posTwo) {
-		int temp = arr[posOne];
-		arr[posOne] = arr[posTwo];
-		arr[posTwo] = temp;
-	}
-
+    }
 }

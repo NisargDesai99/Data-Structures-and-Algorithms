@@ -1,86 +1,92 @@
 import java.util.Random;
 
 public class Quicksort {
-    
+
     private final int RANDOM = 0; // random pivot
     private final int FIRST_ELEMENT = 1; // first element as pivot
     private final int MEDIAN_OF_RANDOM = 2; // median of 3 random numbers from array as pivot
     private final int MEDIAN_F_M_L = 3; // meian of first, middle, and last from array as pivot
 
-    int[] array;
+    private int[] array;
+    private int[] origArray;
 
-    public Quicksort() {
-        generateRandomArray(100);
-    }
+    // public Quicksort() {
+    //     generateRandomArray(100);
+    // }
 
     public Quicksort(int size) {
         generateRandomArray(size);
     }
 
-    public Quicksort(int[] array) {
-        this.array = array;
+    // public Quicksort(int[] array) {
+    //     this.array = array;
+    //     this.origArray = new int[this.array.length];
+    //     for (int i = 0; i < array.length; i++) {
+    //         this.origArray[i] = Integer.valueOf(this.array[i]);
+    //     }
+    // }
+
+    // public Quicksort(int size, int limit) {
+    //     generateRandomArray(size, limit);
+    // }
+
+    // public void setArray(int[] array) {
+    //     this.array = array;
+    // }
+
+    public void reset() {
+        array = new int[this.origArray.length];
+        for (int i = 0; i < this.origArray.length; i++) {
+            this.array[i] = Integer.valueOf(this.origArray[i]);
+        }
     }
 
-    public Quicksort(int size, int limit) {
-		generateRandomArray(size, limit);
-	}
-
     public void sort(int pivotType) {
-        // call recursive quicksort
-        quicksort(this.array, 0, this.array.length, pivotType);
+        quicksort(this.array, 0, this.array.length - 1, pivotType);
     }
 
     private void quicksort(int[] arrToSort, int leftIndex, int rightIndex, int pivotType) {
-        if (leftIndex <= rightIndex) {
-            
-            int partitionIndex = partition(arrToSort, leftIndex, rightIndex, pivotType);
+        if (leftIndex < rightIndex) {
+            int pivotIndex = generatePivotIndex(pivotType, leftIndex, rightIndex + 1);
+            int partitionIndex = partition(arrToSort, leftIndex, rightIndex, pivotIndex);
 
             quicksort(arrToSort, leftIndex, partitionIndex - 1, pivotType);
             quicksort(arrToSort, partitionIndex + 1, rightIndex, pivotType);
         }
     }
 
-    private int partition(int[] arr, int left, int right, int pivotType) {
-        
-        int pivotIndex = generatePivotIndex(pivotType, left, right);
-        swapReferences(arr, pivotIndex, right - 1);
+    private int partition(int[] arr, int left, int right, int pivotIndex) {
+        int pivot = arr[pivotIndex];
+        swapReferences(arr, pivotIndex, right);
+        pivotIndex = right;
+        int i = (left - 1); // index of smaller element
+        for (int j = left; j < right; j++) {
+            // If current element is smaller than or
+            // equal to pivot
+            if (arr[j] <= pivot) {
+                i++;
 
-        int i = left, j = right - 1;
-        Integer pivot = arr[pivotIndex];
-
-        for ( ; ; ) {
-            while ((new Integer(arr[++i])).compareTo(pivot) < 0) {  }
-            while ((new Integer(arr[--j])).compareTo(pivot) > 0) {  }
-
-            if (i < j) {
+                // swap arr[i] and arr[j]
                 swapReferences(arr, i, j);
-            } else {
-                break;
             }
         }
 
-        swapReferences(arr, i, right - 1);
-        return i;
+        // swap arr[i+1] and arr[high] (or pivot)
+        swapReferences(arr, i+1, right);
+
+        return i + 1;
     }
 
-    private void swapReferences(int[] arr, int firstIndex, int secondIndex) {
-        int temp = arr[firstIndex];
-        arr[firstIndex] = arr[secondIndex];
-        arr[secondIndex] = temp;
-    }
-
-    // generate a pivot based on the type of pivot that is specified
-    // should be called with (pivotType, 0) as parameters if pivot should not be random
     private int generatePivotIndex(final int pivotType, int lowerBound, int upperBound) {
         if (pivotType == RANDOM && upperBound > 0) {
-            return getRandomNumRange(lowerBound, upperBound); // return random index to be a pivot
+            return getRandNumRange(lowerBound, upperBound); // return random index to be a pivot
         } else if (pivotType == FIRST_ELEMENT) {
-            return 0; // return first index to be a pivot
+            return lowerBound;
         } else if (pivotType == MEDIAN_OF_RANDOM) {
 
-            int randA = getRandomNumUpperBound(this.array.length);
-            int randB = getRandomNumUpperBound(this.array.length);
-            int randC = getRandomNumUpperBound(this.array.length);
+            int randA = getRandNumRange(lowerBound, upperBound);
+            int randB = getRandNumRange(lowerBound, upperBound);
+            int randC = getRandNumRange(lowerBound, upperBound);
 
             int a = this.array[randA];
             int b = this.array[randB];
@@ -96,9 +102,9 @@ public class Quicksort {
                 return randC;
 
         } else if (pivotType == MEDIAN_F_M_L) {
-            int indexA = 0;
-            int indexB = this.array.length / 2;
-            int indexC = this.array.length - 1;
+            int indexA = lowerBound;
+            int indexB = ((upperBound - lowerBound) / 2) + lowerBound;
+            int indexC = upperBound - 1;
 
             int a = this.array[indexA];
             int b = this.array[indexB];
@@ -123,39 +129,40 @@ public class Quicksort {
         return median;
     }
 
-    // generate random number with no limits
-    private int generateRandomNumber() {
-        Random rand = new Random();
-        int randomNum = rand.nextInt();
-        return randomNum;
+    private void swapReferences(int[] arr, int first, int second) {
+        int temp = arr[first];
+        arr[first] = arr[second];
+        arr[second] = temp;
     }
 
-    // genereate random number with an upper bound
-    private int getRandomNumUpperBound(int upperBound) {
-        Random rand = new Random();
-        int randomNum = rand.nextInt(upperBound);
-        return randomNum;
+    private int getRandomNum() {
+        return (new Random().nextInt());
     }
 
-    // generate random number with a lower and upper bound
-    private int getRandomNumRange(int lowerBound, int upperBound) {
-        Random rand = new Random();
-        int randomNum = lowerBound + rand.nextInt(upperBound - lowerBound);
-        return randomNum;
+    private int getRandNumUpper(int upperBound) {
+        return (new Random().nextInt(upperBound));
+    }
+
+    private int getRandNumRange(int lowerBound, int upperBound) {
+        return (lowerBound + (new Random().nextInt(upperBound - lowerBound)));
     }
 
     // generate array with random values of specified size
     private void generateRandomArray(int size) {
         this.array = new int[size];
+        this.origArray = new int[size];
         for (int i = 0; i < size; i++) {
-            this.array[i] = generateRandomNumber();
+            this.array[i] = getRandomNum();
+            this.origArray[i] = Integer.valueOf(this.array[i]);
         }
     }
 
     private void generateRandomArray(int size, int limit) {
         this.array = new int[size];
+        this.origArray = new int[size];
         for (int i = 0; i < size; i++) {
-            this.array[i] = getRandomNumUpperBound(limit);
+            this.array[i] = getRandNumUpper(limit);
+            this.origArray[i] = Integer.valueOf(this.array[i]);
         }
     }
 
@@ -166,6 +173,24 @@ public class Quicksort {
         }
         bldr.deleteCharAt(bldr.length() - 1);
         System.out.println(bldr.toString());
+    }
+
+    public void printOrigArray() {
+        StringBuilder bldr = new StringBuilder();
+        for (int i = 0; i < this.origArray.length; i++) {
+            bldr.append(this.origArray[i]).append(" ");
+        }
+        bldr.deleteCharAt(bldr.length() - 1);
+        System.out.println(bldr.toString());
+    }
+
+    public String toString() {
+        StringBuilder bldr = new StringBuilder();
+        for (int i = 0; i < this.array.length; i++) {
+            bldr.append(this.array[i]).append("\n");
+        }
+        bldr.deleteCharAt(bldr.length() - 1);
+        return bldr.toString();
     }
 
 }

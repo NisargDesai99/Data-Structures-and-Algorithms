@@ -33,6 +33,16 @@
         },
         {
             "type": "java",
+            "name": "Debug (Launch)-Test",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "mainClass": "Test",
+            "args": ""
+        },
+        {
+            "type": "java",
             "name": "Debug (Attach)",
             "request": "attach",
             "hostName": "localhost",

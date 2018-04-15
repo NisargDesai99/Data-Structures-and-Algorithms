@@ -6,9 +6,9 @@ public class Test {
 	public static void main(String[] args) {
 		
 		// Quicksort quicksort = new Quicksort(10, 100);
-		Quicksort quicksort = new Quicksort(new int[] { 95, 92, 26, 37, 48, 99, 0, 67, 34, 41 });
+		// Quicksort1 quicksort = new Quicksort1(new int[] { 95, 92, 26, 37, 48, 99, 0, 67, 34, 41 });
 
-		// Quicksort quicksort = new Quicksort(new int[] { 4,8,66,35,74,33,3,46,91,46 });
+		Quicksort1 quicksort = new Quicksort1(new int[] { 4,8,66,35,74,33,3,46,91,46 });
 
 		out.println("Before sort");
 		quicksort.printArray();

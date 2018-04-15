@@ -14,21 +14,25 @@ public class Quicksort {
     //     generateRandomArray(100);
     // }
 
-    // public Quicksort(int size) {
-    //     generateRandomArray(size);
+    public Quicksort(int size) {
+        generateRandomArray(size);
+    }
+
+    // public Quicksort(int[] array) {
+    //     this.array = array;
+    //     this.origArray = new int[this.array.length];
+    //     for (int i = 0; i < array.length; i++) {
+    //         this.origArray[i] = Integer.valueOf(this.array[i]);
+    //     }
     // }
 
-    public Quicksort(int[] array) {
-        this.array = array;
-    }
+    // public Quicksort(int size, int limit) {
+    //     generateRandomArray(size, limit);
+    // }
 
-    public Quicksort(int size, int limit) {
-        generateRandomArray(size, limit);
-    }
-
-    public void setArray(int[] array) {
-        this.array = array;
-    }
+    // public void setArray(int[] array) {
+    //     this.array = array;
+    // }
 
     public void reset() {
         array = new int[this.origArray.length];
@@ -146,8 +150,10 @@ public class Quicksort {
     // generate array with random values of specified size
     private void generateRandomArray(int size) {
         this.array = new int[size];
+        this.origArray = new int[size];
         for (int i = 0; i < size; i++) {
             this.array[i] = getRandomNum();
+            this.origArray[i] = Integer.valueOf(this.array[i]);
         }
     }
 
@@ -176,6 +182,15 @@ public class Quicksort {
         }
         bldr.deleteCharAt(bldr.length() - 1);
         System.out.println(bldr.toString());
+    }
+
+    public String toString() {
+        StringBuilder bldr = new StringBuilder();
+        for (int i = 0; i < this.array.length; i++) {
+            bldr.append(this.array[i]).append("\n");
+        }
+        bldr.deleteCharAt(bldr.length() - 1);
+        return bldr.toString();
     }
 
 }

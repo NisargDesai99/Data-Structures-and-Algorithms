@@ -17,3 +17,11 @@ Using the first element of the array as the pivot was generally faster than usin
 Using the median of three random numbers was slower.
 
 As the array sizes got bigger and bigger, the time to sort generally increased by ten times the previous sort time for the previous size. The sizes used to test were: 100, 1,000, 10,000, 100,000, 1,000,000, and 10,000,000.
+
+To run this program:
+
+1. Open Terminal/Command Line
+2. Change directory to this project
+3. javac Main.java
+4. java Main
+5. Look at unsorted.txt and sorted.txt to see the sorted and unsorted arrays

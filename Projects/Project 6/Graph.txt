@@ -1,0 +1,38 @@
+// import java.util.List;
+
+// public abstract class Graph {
+
+//     private int numVertices;
+//     private int numEdges;
+    
+//     // public Graph() {
+//     //     numVertices = 0;
+//     //     numEdges = 0;
+//     // }
+
+//     public void setNumVertices(int numVertices) {
+//         this.numVertices = numVertices;
+//     }
+
+//     public void setNumEdges(int numEdges) {
+//         this.numEdges = numEdges;
+//     }
+
+//     public int getNumVertices() {
+//         return this.numVertices;
+//     }
+
+//     public int getNumEdges() {
+//         return this.numEdges;
+//     }
+
+//     // public void addVertex() {
+//     //     implementAddVertex();
+//     //     numVertices++;
+//     // }
+
+//     // public abstract void addVertex();
+
+//     // public abstract List<Integer> getNeighbors(int v);
+
+// }

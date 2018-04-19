@@ -1,0 +1,45 @@
+import java.io.File;
+import java.util.ArrayList;
+import static java.lang.System.out;
+
+public class Test {
+    public static void main(String[] args) {
+
+        FileIO dataFile = new FileIO(new File("flightData.txt"));
+        FileIO queryFile = new FileIO(new File("query.txt"));
+
+        ArrayList<String> dataArrList = dataFile.readAsStringArrayList();
+        ArrayList<String> queryArrList = queryFile.readAsStringArrayList();
+
+        for (int i = 0; i < dataArrList.size(); i++) {
+            String data = dataArrList.get(i);
+            String cityOne = data.substring(0, data.indexOf("|"));
+            String cityTwo = data.substring(cityOne.length() + 1, data.indexOf("|", cityOne.length() + 1));
+            String price = data.substring((cityOne.length() + cityTwo.length() + 2), data.lastIndexOf("|"));
+            String travelTime = data.substring((data.lastIndexOf("|") + 1), (data.length()));
+
+            out.println("--------------------");
+            out.println(data);
+            out.println(cityOne);
+            out.println(cityTwo);
+            out.println(price);
+            out.println(travelTime);
+            out.println("--------------------");
+        }
+
+        for (int i = 0; i < queryArrList.size(); i++) {
+            String query = queryArrList.get(i);
+            String cityOne = query.substring(0, query.indexOf("|"));
+            String cityTwo = query.substring(query.indexOf("|")+1, query.lastIndexOf("|"));
+            String operation = query.substring(query.lastIndexOf("|")+1, query.length());
+
+            out.println("--------------------");
+            out.println(query);
+            out.println(cityOne);
+            out.println(cityTwo);
+            out.println(operation);
+            out.println("--------------------");
+        }
+
+    }
+}

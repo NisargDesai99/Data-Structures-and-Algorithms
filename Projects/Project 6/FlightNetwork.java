@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Set;
 
 public class FlightNetwork {
 
@@ -11,6 +12,10 @@ public class FlightNetwork {
 
     public FlightNetwork(ArrayList<String> flightData) {
         preProcessData(flightData);     // returns a size
+        
+        Set<String> s = cityMap.keySet();
+        String[] citiesArr = s.toArray(new String[s.size()]);
+        System.out.println(citiesList);
     }
 
     private void addEdge(String src, String dest, Flight edge) {
@@ -112,6 +117,19 @@ public class FlightNetwork {
     }
 
     public void getShortestPath(String src, String dest) {
+
+        // HashMap (String key for the city, boolean for visited or not)
+        HashMap<String, Boolean> visited = new HashMap<>();
+        
+        Set<String> citiesSet = cityMap.keySet();
+        // ArrayList<Integer> valueSet = cityMap.values();
+        
+        String[] citiesList = citiesSet.toArray();
+        for (int i = 0; i < cityMap.size(); i++) {
+            visited.put(citiesList[i], false);
+        }
+
+        
 
     }
 

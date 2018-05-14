@@ -6,6 +6,7 @@ Programs written for my Data Structures and Algorithms class
 2. Linked Lists
 3. Lazy Binary Search Tree
 4. Red Black Binary Search Tree
+5. Quicksort using 4 types of pivots
 
 ## Programs from Assignments
 * Longest Alternating Subarray

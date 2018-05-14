@@ -18,21 +18,21 @@ public class Quicksort {
         generateRandomArray(size);
     }
 
-    // public Quicksort(int[] array) {
-    //     this.array = array;
-    //     this.origArray = new int[this.array.length];
-    //     for (int i = 0; i < array.length; i++) {
-    //         this.origArray[i] = Integer.valueOf(this.array[i]);
-    //     }
-    // }
+    public Quicksort(int[] array) {
+        this.array = array;
+        this.origArray = new int[this.array.length];
+        for (int i = 0; i < array.length; i++) {
+            this.origArray[i] = Integer.valueOf(this.array[i]);
+        }
+    }
 
     // public Quicksort(int size, int limit) {
     //     generateRandomArray(size, limit);
     // }
 
-    // public void setArray(int[] array) {
-    //     this.array = array;
-    // }
+    public void setArray(int[] array) {
+        this.array = array;
+    }
 
     public void reset() {
         array = new int[this.origArray.length];
@@ -56,16 +56,15 @@ public class Quicksort {
     }
 
     private int partition(int[] arr, int left, int right, int pivotIndex) {
-        int pivot = arr[pivotIndex];
-        swapReferences(arr, pivotIndex, right);
-        pivotIndex = right;
-        int i = (left - 1); // index of smaller element
+        int pivot = arr[pivotIndex];    // get pivot
+        swapReferences(arr, pivotIndex, right);     // put pivot at the end to hide it
+        pivotIndex = right;     // since we swapped the pivot, we need to update the pivotIndex
+        int i = (left - 1);     // index of smaller element
         for (int j = left; j < right; j++) {
             // If current element is smaller than or
             // equal to pivot
             if (arr[j] <= pivot) {
                 i++;
-
                 // swap arr[i] and arr[j]
                 swapReferences(arr, i, j);
             }
@@ -135,17 +134,11 @@ public class Quicksort {
         arr[second] = temp;
     }
 
-    private int getRandomNum() {
-        return (new Random().nextInt());
-    }
+    private int getRandomNum() { return (new Random().nextInt()); }
 
-    private int getRandNumUpper(int upperBound) {
-        return (new Random().nextInt(upperBound));
-    }
+    private int getRandNumUpper(int upperBound) { return (new Random().nextInt(upperBound)); }
 
-    private int getRandNumRange(int lowerBound, int upperBound) {
-        return (lowerBound + (new Random().nextInt(upperBound - lowerBound)));
-    }
+    private int getRandNumRange(int lowerBound, int upperBound) { return (lowerBound + (new Random().nextInt(upperBound - lowerBound))); }
 
     // generate array with random values of specified size
     private void generateRandomArray(int size) {
